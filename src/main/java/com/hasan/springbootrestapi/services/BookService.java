@@ -25,16 +25,20 @@ public class BookService {
 
     public Book getBookById(int id) {
         Book findBook = null;
-        findBook = bookList.stream().filter(book ->
-                book.getId() == id
-        ).findFirst().get();
+        try {
+            findBook = bookList.stream().filter(book ->
+                    book.getId() == id
+            ).findFirst().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return findBook;
     }
 
     // adding the book
-    public void addBook(Book book) {
-        bookList.add(book);
+    public Book addBook(Book book) {
+        return bookList.add(book);
     }
 
     // delete book
