@@ -40,6 +40,18 @@ public class BookController {
 
     }
 
+/*    //get single book handler
+    @GetMapping("/books/{id}")
+    public Object getBookById(@PathVariable("id") int id) {
+
+        Book book = bookService.getBookById(id);
+        if (book == null) {
+            return "Data not found";
+        }
+        return book;
+
+    }*/
+
     // add new block handler
     @PostMapping("/books")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
@@ -56,15 +68,28 @@ public class BookController {
 
     // delete handler
     @DeleteMapping("books/{bookId}")
-    public void deleteBook(@PathVariable("bookId") int bookId) {
-        this.bookService.deleteBook(bookId);
+    public ResponseEntity<Void> deleteBook(@PathVariable("bookId") int bookId) {
+        try {
+            this.bookService.deleteBook(bookId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
     // update book handler
     @PutMapping("/books/{id}")
-    public Book updateBook(@RequestBody Book book, @PathVariable("id") int id) {
-        this.bookService.updateBook(book, id);
-        return book;
+    public ResponseEntity<Book> updateBook(@RequestBody Book book, @PathVariable("id") int id) {
+        try {
+            this.bookService.updateBook(book, id);
+            return ResponseEntity.ok().body(book);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
     }
 

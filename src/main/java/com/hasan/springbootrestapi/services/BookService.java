@@ -38,7 +38,8 @@ public class BookService {
 
     // adding the book
     public Book addBook(Book book) {
-        return bookList.add(book);
+        bookList.add(book);
+        return book;
     }
 
     // delete book
