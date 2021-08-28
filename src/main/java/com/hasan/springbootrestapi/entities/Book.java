@@ -1,6 +1,15 @@
 package com.hasan.springbootrestapi.entities;
 
+import org.hibernate.dialect.MySQL57Dialect;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "books")
 public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String title;
     private String author;

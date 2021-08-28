@@ -1,34 +1,29 @@
 package com.hasan.springbootrestapi.services;
 
 import com.hasan.springbootrestapi.entities.Book;
+import com.hasan.springbootrestapi.repositories.BookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class BookService {
 
-    private static List<Book> bookList = new ArrayList<>();
-
-    static {
-        bookList.add(new Book(2, "Java Complete Reference", "XYZ"));
-        bookList.add(new Book(3, "Head First Java", "ABC"));
-        bookList.add(new Book(4, "Java Programming", "ANM Bazlur Rahman"));
-    }
+    @Autowired
+    private BookRepository bookRepository;
 
     public List<Book> getAllBooks() {
+
+        List<Book> bookList = (List<Book>) this.bookRepository.findAll();
         return bookList;
     }
 
     public Book getBookById(int id) {
         Book findBook = null;
         try {
-            findBook = bookList.stream().filter(book ->
-                    book.getId() == id
-            ).findFirst().get();
+            findBook = this.bookRepository.findById(id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,24 +33,18 @@ public class BookService {
 
     // adding the book
     public Book addBook(Book book) {
-        bookList.add(book);
-        return book;
+        Book resultBook = bookRepository.save(book);
+        return resultBook;
     }
 
     // delete book
     public void deleteBook(int bookId) {
-        bookList = bookList.stream().filter(book -> book.getId() != bookId).collect(Collectors.toList());
+        bookRepository.deleteById(bookId);
     }
 
     public void updateBook(Book book, int id) {
-        bookList = bookList.stream().map(b -> {
-            if (b.getId() == id) {
-                b.setTitle(book.getTitle());
-                b.setAuthor(book.getAuthor());
-            }
-
-            return b;
-        }).collect(Collectors.toList());
+        book.setId(id);
+        bookRepository.save(book);
     }
 
 
