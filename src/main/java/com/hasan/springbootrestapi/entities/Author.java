@@ -1,9 +1,9 @@
 package com.hasan.springbootrestapi.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.persistence.*;
 
 @Entity
 public class Author {
@@ -15,14 +15,19 @@ public class Author {
     private String authorAddress;
     private String language;
 
+    @OneToOne(mappedBy = "author")
+    @JsonBackReference
+    private Book book;
+
     public Author() {
     }
 
-    public Author(int id, String authorName, String authorAddress, String language) {
+    public Author(int id, String authorName, String authorAddress, String language, Book book) {
         this.id = id;
         this.authorName = authorName;
         this.authorAddress = authorAddress;
         this.language = language;
+        this.book = book;
     }
 
     public int getId() {
@@ -57,6 +62,14 @@ public class Author {
         this.language = language;
     }
 
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
     @Override
     public String toString() {
         return "Author{" +
@@ -64,6 +77,7 @@ public class Author {
                 ", authorName='" + authorName + '\'' +
                 ", authorAddress='" + authorAddress + '\'' +
                 ", language='" + language + '\'' +
+                ", book=" + book +
                 '}';
     }
 }

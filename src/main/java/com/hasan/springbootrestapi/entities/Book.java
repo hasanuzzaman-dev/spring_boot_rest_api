@@ -1,5 +1,6 @@
 package com.hasan.springbootrestapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.dialect.MySQL57Dialect;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class Book {
     private int id;
     private String title;
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Author author;
 
     public Book() {
